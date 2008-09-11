@@ -1,0 +1,1 @@
+require "memory_usage_logger"
