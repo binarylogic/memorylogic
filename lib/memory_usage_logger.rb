@@ -1,12 +1,15 @@
-module BinaryLogic
-  module MemoryUsageLogger
-    private
-      def rendering_runtime(*args)
-        msg = super
-        memory_usage = `ps -o rss= -p #{$$}`.to_i
-        msg + " | PID: #{$$} | Memory Usage: #{memory_usage}"
-      end
+module MemoryUsageLogger
+  def self.included(klass)
+    klass.class_eval
+      after_filter :log_memory_usage
+    end
   end
+  
+  private
+    def log_memory_usage
+      if logger
+        memory_usage = `ps -o rss= -p #{$$}`.to_i
+        logger.info("Memory usage: #{memory_usage} | PID: #{$$}")
+      end
+    end
 end
-
-ActionController::Base.send(:include, BinaryLogic::MemoryUsageLogger)
