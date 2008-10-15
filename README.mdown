@@ -2,9 +2,17 @@
 
 This is linux specific. The following command retrieves the memory:
 
-  memory_usage = `ps -o rss= -p #{$$}`.to_i
+	memory_usage = `ps -o rss= -p #{$$}`.to_i
 
 The reason I created this was to help track down a memory leak. It worked very well because it adds the process id and memory usage in with each rails request. This way, if you have a cluster, you can monitor each process and scroll through your logs and watch the memory. If it suddenly starts to jump you can look at the request and at least you have a starting point. You can checkout the code for that specific controller action and try to narrow it down.
 
+You basically let the public find the memory leak for you.
 
-Copyright (c) 2007 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license
+# Usage
+
+	class Applicationcontroller
+		include MemoryUsageLogger
+	end
+
+
+Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license
