@@ -2,17 +2,27 @@
 
 This is linux specific. The following command retrieves the memory:
 
-	memory_usage = `ps -o rss= -p #{$$}`.to_i
+  memory_usage = `ps -o rss= -p #{$$}`.to_i
 
-The reason I created this was to help track down a memory leak. It worked very well because it adds the process id and memory usage in with each rails request. This way, if you have a cluster, you can monitor each process and scroll through your logs and watch the memory. If it suddenly starts to jump you can look at the request and at least you have a starting point. You can checkout the code for that specific controller action and try to narrow it down.
+The reason I created this was to help track down a memory leak. It worked very well because it adds the process id and memory usage in with *EVERY* single line logged and at the end of each rails request. By every line, I mean every line in your log will end with " (mem #{memory_usage})".
 
-You basically let the public find the memory leak for you.
+This way, if you have a cluster, you can monitor each process and scroll through your logs and watch the memory. If it suddenly starts to jump you can look at the request and at least you have a starting point. You can checkout the code for that specific controller action and try to narrow it down. 
 
-# Usage
+# Tips
 
-	class Applicationcontroller
-		include MemoryUsageLogger
-	end
+Open up your log in a program that is made to read large files, NOT textmate. The console on the mac is a great program for this. To track a process id just do a "find next" with that process id. Watch the memory as you do this, if you have a true leak it will either gradually increase and never stop, or jump all at once. This will help you pin point the type of requests increasing your memory.
+
+A great tool for hammering your server to find the memory leak yourself is the apache benchmarking tool. It should come pre-installed on your mac. Do something like:
+
+  ab -kc 10 -t 30 http://127.0.0.1:3000/
+
+The above will create 10 threads to hammer your server for 30 seconds as fast as they can. This will go crazy, so be careful. If you have a bad memory leak this will consume your memory in no time.
+
+# Installation
+
+  class Applicationcontroller
+    include MemoryUsageLogger
+  end
 
 
 Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license
