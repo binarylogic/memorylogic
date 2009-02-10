@@ -22,6 +22,12 @@ Lastly, if you notice your memory gradually increasing with each request, chance
 
 If you are still lost and can't seem to pinpoint the problem, your best bet might be to create an entirely new app and move things over one by one until you can reproduce the leak. I know this is a pain in the ass, but sometimes it is the only way. It might take you a couple of hours, but you will find it. I've had my fair share of finding memory leaks and this method has yet to fail me.
 
+== Other tools
+
+Another tool you might find useful is: http://github.com/noahd1/oink/tree/master
+
+It parses your logs and helps you find the problem in your logs. If your log is huge, this should be a quicker solution than manually searching your logs.
+
 == Installation
 
   class Applicationcontroller
