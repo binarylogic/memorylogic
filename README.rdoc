@@ -31,7 +31,7 @@ It parses your logs and helps you find the problem in your logs. If your log is 
 == Installation
 
   class Applicationcontroller
-    include MemoryUsageLogger
+    include Memorylogic
   end
 
 

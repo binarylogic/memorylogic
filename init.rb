@@ -1,1 +1,1 @@
-require "memory_usage_logger"
+require "memorylogic"

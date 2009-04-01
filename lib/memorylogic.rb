@@ -1,4 +1,4 @@
-module MemoryUsageLogger
+module Memorylogic
   def self.included(klass)
     klass.class_eval do
       after_filter :log_memory_usage
