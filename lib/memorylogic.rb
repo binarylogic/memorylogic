@@ -5,20 +5,22 @@ module Memorylogic
     end
   end
 
+  def self.memory_usage
+    `ps -o rss= -p #{Process.pid}`.to_i
+  end
+
   private
     def log_memory_usage
       if logger
-        memory_usage = `ps -o rss= -p #{Process.pid}`.to_i
-        logger.info("Memory usage: #{memory_usage} | PID: #{$$}")
+        logger.info("Memory usage: #{Memorylogic.memory_usage} | PID: #{Process.pid}")
       end
     end
 end
 
 ActiveSupport::BufferedLogger.class_eval do
   def add_with_memory_info(severity, message = nil, progname = nil, &block)
-    memory_usage = `ps -o rss= -p #{$$}`.to_i
     message ||= ""
-    message += " (mem #{memory_usage})"
+    message += "\nMemory usage: #{Memorylogic.memory_usage}\n\n"
     add_without_memory_info(severity, message, progname, &block)
   end
 
