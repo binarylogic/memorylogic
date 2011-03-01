@@ -4,11 +4,11 @@ module Memorylogic
       after_filter :log_memory_usage
     end
   end
-  
+
   private
     def log_memory_usage
       if logger
-        memory_usage = `ps -o rss= -p #{$$}`.to_i
+        memory_usage = `ps -o rss= -p #{Process.pid}`.to_i
         logger.info("Memory usage: #{memory_usage} | PID: #{$$}")
       end
     end
@@ -21,6 +21,6 @@ ActiveSupport::BufferedLogger.class_eval do
     message += " (mem #{memory_usage})"
     add_without_memory_info(severity, message, progname, &block)
   end
-  
+
   alias_method_chain :add, :memory_info
 end

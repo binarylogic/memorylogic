@@ -6,7 +6,11 @@ This is linux specific. The following command retrieves the memory:
 
 The reason I created this was to help track down a memory leak. It worked very well because it adds the process id and memory usage in with *EVERY* single line logged and at the end of each rails request. By every line, I mean every line in your log will end with " (mem #{memory_usage})".
 
-This way, if you have a cluster, you can monitor each process and scroll through your logs and watch the memory. If it suddenly starts to jump you can look at the request and at least you have a starting point. You can checkout the code for that specific controller action and try to narrow it down. 
+This way, if you have a cluster, you can monitor each process and scroll through your logs and watch the memory. If it suddenly starts to jump you can look at the request and at least you have a starting point. You can checkout the code for that specific controller action and try to narrow it down.
+
+== Performance
+
+Please note this is only for doing research. There is a cost to finding the current memory usage on every log output. The average cost is probably in the realm of 20ms per execution. Which means an extra 20ms every time a line is logged.
 
 == Tips
 
