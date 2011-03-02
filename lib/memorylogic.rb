@@ -5,8 +5,12 @@ module Memorylogic
     end
   end
 
+  class << self
+    include ActionView::Helpers::NumberHelper
+  end
+
   def self.memory_usage
-    `ps -o rss= -p #{Process.pid}`.to_i
+    number_to_human_size(`ps -o rss= -p #{Process.pid}`.to_i)
   end
 
   private
@@ -19,9 +23,9 @@ end
 
 ActiveSupport::BufferedLogger.class_eval do
   def add_with_memory_info(severity, message = nil, progname = nil, &block)
-    message ||= ""
-    message += "\nMemory usage: #{Memorylogic.memory_usage}\n\n"
-    add_without_memory_info(severity, message, progname, &block)
+    r = add_without_memory_info(severity, message, progname, &block)
+    add_without_memory_info(severity, "  \e[1;31mMemory usage:\e[0m #{Memorylogic.memory_usage}\n\n", progname, &block)
+    r
   end
 
   alias_method_chain :add, :memory_info
